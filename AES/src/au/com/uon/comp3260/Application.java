@@ -3,7 +3,7 @@ package au.com.uon.comp3260;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class Main {
+public class Application {
 
 	public static void main(String[] args) {
 		if (args == null || args.length < 3) {
