@@ -24,12 +24,15 @@ public class Encrypter {
 		System.out.println(Helper.matrixToString(plainTextBytes, true));
 		byte[] keyBytes = Helper.stringToByteArray(key);
 		byte[][] encrypted = encrypt(plainTextBytes, keyBytes, AESType.AES0);
+		long end = System.currentTimeMillis();
 		System.out.println("Encrypted Bytes:");
 		System.out.println(Helper.matrixToString(encrypted, true));
 		OutputFileWriter writer = new OutputFileWriter();
 		writer.setKey(key);
 		writer.setPlainText(plainText);
+		writer.setTitle("ENCRYPTION");
 		writer.setStartTime(start);
+		writer.setEndTime(end);
 		writer.setCipherText(Helper.arrayToString(
 				Helper.convertMatrixToArray(encrypted), false));
 		writer.writeToFile(outputFile);

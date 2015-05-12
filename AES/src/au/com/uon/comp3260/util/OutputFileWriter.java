@@ -20,9 +20,10 @@ public class OutputFileWriter {
 	private String key;
 	private String cipherText;
 	private long startTime;
+	private long endTime;
 
 	public void writeToFile(Path outputFile) {
-		long duration = System.currentTimeMillis() - startTime;
+		long duration = endTime - startTime;
 
 		List<String> lines = new ArrayList<String>();
 		lines.add(title);
@@ -59,5 +60,9 @@ public class OutputFileWriter {
 
 	public void setStartTime(long startTime) {
 		this.startTime = startTime;
+	}
+
+	public void setEndTime(long endTime) {
+		this.endTime = endTime;
 	}
 }
