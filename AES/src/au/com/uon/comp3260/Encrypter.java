@@ -33,8 +33,7 @@ public class Encrypter {
 				output = byteSubstituter.substituteBytes(output, false);
 			}
 			if (!type.isSkipShiftRows()) {
-				// TODO: ANDREW
-				// output = rowShifter.
+				output = rowShifter.shiftRows(output, false);
 			}
 			if (!type.isSkipMixColumns()) {
 				// TODO: ANDREW
