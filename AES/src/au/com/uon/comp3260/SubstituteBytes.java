@@ -1,5 +1,12 @@
 package au.com.uon.comp3260;
 
+/**
+ * 
+ * This class can substitute bytes used in AES Encryption / Decryption
+ * 
+ * @author Felix Behrendt
+ * 
+ */
 public class SubstituteBytes {
 
 	// SBox from lecture
@@ -54,20 +61,15 @@ public class SubstituteBytes {
 			0x3c, 0x83, 0x53, 0x99, 0x61, 0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77,
 			0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d };
 
-	private String[][] substituteBytes(String[][] input, boolean decrypt) {
-		byte[][] inputAsBytes = null;
-		// Select the correct s-box, either inverted or not.
+	private byte[][] substituteBytes(byte[][] input, boolean decrypt) {
 		char[] matrix = subByteMatrix;
 		if (decrypt) {
+			// Use the inverted matrix when decrypting
 			matrix = inversedSubByteMatrix;
 		}
-
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 4; j++)
-				inputAsBytes[i][j] = (byte) matrix[inputAsBytes[i][j] & 0xFF];
-		// The mask is used to shift the byte value to the unsigned (positive)
-		// one
-		String[][] outputBytesAsString = null;
-		return outputBytesAsString;
+				input[i][j] = (byte) matrix[input[i][j] & 0xFF];
+		return input;
 	}
 }
