@@ -17,7 +17,14 @@ public class Encrypter {
 	}
 
 	public Encrypter(String plainText, String key, Path outputFile) {
-
+		System.out.println("Reading plaintext: " + plainText);
+		System.out.println("Reading key: " + key);
+		byte[][] plainTextBytes = Helper.stringToMatrix(plainText);
+		System.out.println("Input Bytes: \n");
+		System.out.println(Helper.stringForMatrix(plainTextBytes));
+		byte[] keyBytes = Helper.stringToByteArray(key);
+		byte[][] encrypted = encrypt(plainTextBytes, keyBytes, AESType.AES0);
+		System.out.println(Helper.stringForMatrix(encrypted));
 	}
 
 	private byte[][] encrypt(byte[][] input, byte[] key, AESType type) {

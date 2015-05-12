@@ -18,10 +18,10 @@ public class Application {
 		}
 		Path inputFile = Paths.get(args[1]);
 		Path outputFile = Paths.get(args[2]);
-		if (args[0].equalsIgnoreCase("encode")) {
+		if (args[0].equalsIgnoreCase("encrypt")) {
 			Encrypter enc = new Encrypter(inputFile, outputFile);
 			// start encryption
-		} else if (args[0].equalsIgnoreCase("decode")) {
+		} else if (args[0].equalsIgnoreCase("decrypt")) {
 			Decrypter dec = new Decrypter(inputFile, outputFile);
 			// start decryption
 		} else {
@@ -35,12 +35,12 @@ public class Application {
 				.println("Welcome to AES Project for COMP3260 by Felix Behrendt and Andrew Thursby");
 		System.out.println("");
 		System.out.println("Usage:");
-		System.out.println("encode inputfile outputfile");
+		System.out.println("encrypt inputfile outputfile");
 		System.out
 				.println("       inputfile:   path to the input file containing a plaintext and a key");
 		System.out
 				.println("       outputfile:  path to the output file where the ciphertext and analysis should be stored");
-		System.out.println("decode inputfile outputfile");
+		System.out.println("decrypt inputfile outputfile");
 		System.out
 				.println("       inputfile:   path to the input file containing a ciphertext and a key");
 		System.out
