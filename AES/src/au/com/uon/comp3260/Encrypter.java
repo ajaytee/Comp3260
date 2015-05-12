@@ -20,4 +20,31 @@ public class Encrypter {
 
 	}
 
+	private byte[][] encrypt(byte[][] input, byte[] key, AESType type) {
+		AddRoundKey roundKeyAdder = new AddRoundKey();
+		SubstituteBytes byteSubstituter = new SubstituteBytes();
+		ShiftRows rowShifter = new ShiftRows();
+		MixColumns columnMixer = new MixColumns();
+
+		byte[][] output;
+		output = roundKeyAdder.addRoundKey(input, key);
+		for (int round = 0; round < 10; round++) {
+			if (!type.isSkipSubBytes()) {
+				output = byteSubstituter.substituteBytes(output, false);
+			}
+			if (!type.isSkipShiftRows()) {
+				// TODO: ANDREW
+				// output = rowShifter.
+			}
+			if (!type.isSkipMixColumns()) {
+				// TODO: ANDREW
+				// output = columnMixer.
+			}
+			if (!type.isSkipAddRoundKey()) {
+				output = roundKeyAdder.addRoundKey(output, key);
+			}
+			// TODO Calculate Avalange Effect and add data to output file writer
+		}
+		return output;
+	}
 }

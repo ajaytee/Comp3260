@@ -61,7 +61,7 @@ public class SubstituteBytes {
 			0x3c, 0x83, 0x53, 0x99, 0x61, 0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77,
 			0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d };
 
-	private byte[][] substituteBytes(byte[][] input, boolean decrypt) {
+	public byte[][] substituteBytes(byte[][] input, boolean decrypt) {
 		char[] matrix = subByteMatrix;
 		if (decrypt) {
 			// Use the inverted matrix when decrypting
