@@ -60,10 +60,6 @@ public class Helper {
 		return hexMatrix;
 	}
 
-	public static byte[][] stringToMatrix(String binaryString) {
-		return convertArrayToMatrix(stringToByteArray(binaryString));
-	}
-
 	public static byte[] convertMatrixToArray(byte[][] matrix) {
 		byte[] array = new byte[16];
 		int k = 0;
@@ -108,6 +104,26 @@ public class Helper {
 			value = "0" + value;
 		}
 		return value;
+	}
+
+	/**
+	 * Compares to byte arrays and returns the number of bits that are different
+	 * 
+	 * @param original
+	 * @param newText
+	 * @return int > 0
+	 */
+	public static int numberOfDifferentBits(byte[] original, byte[] newText) {
+		// It is very easy to compare to strings
+		String org = arrayToString(original, false);
+		String newTex = arrayToString(newText, false);
+		int diff = 0;
+		for (int i = 0; i < org.length(); i++) {
+			if (org.charAt(i) != newTex.charAt(i)) {
+				diff++;
+			}
+		}
+		return diff;
 	}
 
 }

@@ -19,11 +19,13 @@ public class Encrypter {
 
 	public Encrypter(String plainText, String key, Path outputFile) {
 		long start = System.currentTimeMillis();
-		byte[][] plainTextBytes = Helper.stringToMatrix(plainText);
+		byte[] plainTextByteArray = Helper.stringToByteArray(plainText);
+
 		System.out.println("Input Bytes:");
-		System.out.println(Helper.matrixToString(plainTextBytes, true));
+		System.out.println(Helper.matrixToString(
+				Helper.convertArrayToMatrix(plainTextByteArray), true));
 		byte[] keyBytes = Helper.stringToByteArray(key);
-		byte[][] encrypted = encrypt(plainTextBytes, keyBytes, AESType.AES0);
+		byte[][] encrypted = encrypt(plainTextByteArray, keyBytes, AESType.AES0);
 		long end = System.currentTimeMillis();
 		System.out.println("Encrypted Bytes:");
 		System.out.println(Helper.matrixToString(encrypted, true));
@@ -38,7 +40,8 @@ public class Encrypter {
 		writer.writeToFile(outputFile);
 	}
 
-	private byte[][] encrypt(byte[][] input, byte[] key, AESType type) {
+	private byte[][] encrypt(byte[] inputArray, byte[] key, AESType type) {
+		byte[][] input = Helper.convertArrayToMatrix(inputArray);
 		AddRoundKey roundKeyAdder = new AddRoundKey();
 		SubstituteBytes byteSubstituter = new SubstituteBytes();
 		ShiftRows rowShifter = new ShiftRows();
