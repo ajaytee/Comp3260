@@ -3,6 +3,7 @@ package au.com.uon.comp3260;
 import java.nio.file.Path;
 
 import au.com.uon.comp3260.util.Helper;
+import au.com.uon.comp3260.util.OutputFileWriter;
 
 /**
  * 
@@ -17,14 +18,21 @@ public class Encrypter {
 	}
 
 	public Encrypter(String plainText, String key, Path outputFile) {
-		System.out.println("Reading plaintext: " + plainText);
-		System.out.println("Reading key: " + key);
+		long start = System.currentTimeMillis();
 		byte[][] plainTextBytes = Helper.stringToMatrix(plainText);
-		System.out.println("Input Bytes: \n");
-		System.out.println(Helper.stringForMatrix(plainTextBytes));
+		System.out.println("Input Bytes:");
+		System.out.println(Helper.matrixToString(plainTextBytes, true));
 		byte[] keyBytes = Helper.stringToByteArray(key);
 		byte[][] encrypted = encrypt(plainTextBytes, keyBytes, AESType.AES0);
-		System.out.println(Helper.stringForMatrix(encrypted));
+		System.out.println("Encrypted Bytes:");
+		System.out.println(Helper.matrixToString(encrypted, true));
+		OutputFileWriter writer = new OutputFileWriter();
+		writer.setKey(key);
+		writer.setPlainText(plainText);
+		writer.setStartTime(start);
+		writer.setCipherText(Helper.arrayToString(
+				Helper.convertMatrixToArray(encrypted), false));
+		writer.writeToFile(outputFile);
 	}
 
 	private byte[][] encrypt(byte[][] input, byte[] key, AESType type) {

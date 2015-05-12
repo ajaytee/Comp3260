@@ -43,8 +43,7 @@ public class Helper {
 		byte[] output = new byte[16];
 		for (int i = 0; i < 16; i++) {
 			String part = binaryString.substring(i * 8, (i + 1) * 8);
-			System.out.println("Reading string part: \"" + part + "\" i:" + i);
-			output[i] = Byte.parseByte(part);
+			output[i] = (byte) Integer.parseInt(part, 2);
 		}
 		return output;
 	}
@@ -77,15 +76,38 @@ public class Helper {
 		return array;
 	}
 
-	public static String stringForMatrix(byte[][] matrix) {
+	public static String matrixToString(byte[][] matrix, boolean pretty) {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < 4; i++) { // i = row #
 			for (int j = 0; j < 4; j++) { // j = column #
-				sb.append(matrix[j][i]);
+				Byte b = matrix[j][i];
+				sb.append(stringForByte(b) + " ");
+				if (pretty)
+					sb.append(" ");
 			}
 			sb.append("\n");
 		}
 		return sb.toString();
+	}
+
+	public static String arrayToString(byte[] array, boolean pretty) {
+		StringBuilder sb = new StringBuilder();
+		for (int j = 0; j < 16; j++) {
+			Byte b = array[j];
+			sb.append(stringForByte(b));
+			if (pretty)
+				sb.append(" ");
+		}
+		return sb.toString();
+	}
+
+	public static String stringForByte(byte b) {
+		String value = Integer.toBinaryString(Byte.toUnsignedInt(b));
+		int missingZeros = 8 - value.length();
+		for (int i = 0; i < missingZeros; i++) {
+			value = "0" + value;
+		}
+		return value;
 	}
 
 }
