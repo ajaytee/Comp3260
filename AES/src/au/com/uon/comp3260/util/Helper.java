@@ -5,9 +5,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+/**
+ * This is a helper class for reading input files and converting arrays and
+ * matrixes
+ * 
+ * @author Felix Behrendt & Andrew Thursby
+ * 
+ */
 public class Helper {
 
-	public static String readLine(Path inputFile, int lineNbr) {
+	private static String readLine(Path inputFile, int lineNbr) {
 		try {
 			List<String> lines = Files.readAllLines(inputFile);
 			if (lines != null && lines.size() > lineNbr) {

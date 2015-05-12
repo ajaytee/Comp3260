@@ -6,6 +6,12 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class writes the output file
+ * 
+ * @author Felix Behrendt & Andrew Thursby
+ * 
+ */
 public class OutputFileWriter {
 
 	private String title;

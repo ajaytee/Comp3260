@@ -4,6 +4,11 @@ import java.nio.file.Path;
 
 import au.com.uon.comp3260.util.Helper;
 
+/**
+ * 
+ * @author Felix Behrendt & Andrew Thursby
+ * 
+ */
 public class Decrypter {
 	public Decrypter(Path inputFile, Path outputFile) {
 		this(Helper.readCipherText(inputFile), Helper.readKey(inputFile),

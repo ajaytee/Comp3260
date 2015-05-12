@@ -3,6 +3,12 @@ package au.com.uon.comp3260;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * This is the Main Class that starts the application
+ * 
+ * @author Felix Behrendt & Andrew Thursby
+ * 
+ */
 public class Application {
 
 	public static void main(String[] args) {
