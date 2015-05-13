@@ -48,8 +48,7 @@ public class Decrypter {
 		for (int round = 0; round < 10; round++) {
 			output = byteSubstituter.substituteBytes(output, true);
 			output = rowShifter.shiftRows(output, true);
-			// TODO: ANDREW
-			// output = columnMixer.
+			output = columnMixer.mixColumns(output, true);
 			output = roundKeyAdder.addRoundKey(output, key);
 		}
 		return output;
