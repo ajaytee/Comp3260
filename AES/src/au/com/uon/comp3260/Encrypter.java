@@ -32,7 +32,7 @@ public class Encrypter {
 		OutputFileWriter writer = new OutputFileWriter();
 		writer.setKey(key);
 		writer.setPlainText(plainText);
-		writer.setTitle("ENCRYPTION");
+		writer.setDecryption(false);
 		writer.setStartTime(start);
 		writer.setEndTime(end);
 		writer.setCipherText(Helper.arrayToString(

@@ -14,7 +14,10 @@ import java.util.List;
  */
 public class OutputFileWriter {
 
-	private String title;
+	/**
+	 * True = decryption False = encryption
+	 */
+	private boolean decryption;
 
 	private String plainText;
 	private String key;
@@ -47,7 +50,11 @@ public class OutputFileWriter {
 		long duration = endTime - startTime;
 
 		List<String> lines = new ArrayList<String>();
-		lines.add(title);
+		if (decryption) {
+			lines.add("DECRYPTION");
+		} else {
+			lines.add("ENCRYPTION");
+		}
 		lines.add("Plaintext P: " + plainText);
 		lines.add("Key K: " + key);
 		lines.add("Ciphertext C: " + cipherText);
@@ -82,8 +89,8 @@ public class OutputFileWriter {
 		}
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setDecryption(boolean decryption) {
+		this.decryption = decryption;
 	}
 
 	public void setPlainText(String plainText) {
