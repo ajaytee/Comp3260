@@ -97,7 +97,7 @@ public class Helper {
 	 *            to be converted
 	 * @return byte matrix with data of the array
 	 */
-	public static byte[][] convertArrayToMatrix(byte[] array) {
+	public static byte[][] arrayToMatrix(byte[] array) {
 		byte[][] hexMatrix = new byte[4][4];
 		int k = 0;
 		for (int i = 0; i < 4; i++) { // i = row #
@@ -116,7 +116,7 @@ public class Helper {
 	 *            to be converted
 	 * @return byte array with the data of the matix
 	 */
-	public static byte[] convertMatrixToArray(byte[][] matrix) {
+	public static byte[] matrixToArray(byte[][] matrix) {
 		byte[] array = new byte[16];
 		int k = 0;
 		for (int i = 0; i < 4; i++) { // i = row #

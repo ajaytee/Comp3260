@@ -23,7 +23,7 @@ public class Encrypter {
 
 		System.out.println("Input Bytes:");
 		System.out.println(Helper.matrixToString(
-				Helper.convertArrayToMatrix(plainTextByteArray), true));
+				Helper.arrayToMatrix(plainTextByteArray), true));
 		byte[] keyBytes = Helper.stringToByteArray(key);
 		byte[][] encrypted = encrypt(plainTextByteArray, keyBytes, AESType.AES0);
 		long end = System.currentTimeMillis();
@@ -36,12 +36,12 @@ public class Encrypter {
 		writer.setStartTime(start);
 		writer.setEndTime(end);
 		writer.setCipherText(Helper.arrayToString(
-				Helper.convertMatrixToArray(encrypted), false));
+				Helper.matrixToArray(encrypted), false));
 		writer.writeToFile(outputFile);
 	}
 
 	private byte[][] encrypt(byte[] inputArray, byte[] key, AESType type) {
-		byte[][] input = Helper.convertArrayToMatrix(inputArray);
+		byte[][] input = Helper.arrayToMatrix(inputArray);
 		AddRoundKey roundKeyAdder = new AddRoundKey();
 		SubstituteBytes byteSubstituter = new SubstituteBytes();
 		ShiftRows rowShifter = new ShiftRows();
