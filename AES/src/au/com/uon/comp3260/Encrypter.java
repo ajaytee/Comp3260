@@ -51,7 +51,7 @@ public class Encrypter {
 
 		// Calculate avalanche effect
 		String encryptedText = Helper.matrixToString(encrypted, false);
-		int[] roundAverages = avalanche(plainText, encryptedText, key, type, writer);
+		int[] roundAverages = avalanche(plainText, encryptedText, key, type);
 		int plainTextAverage = roundAverages[0];
 		int keyAverage = roundAverages[1];
 		// TODO: add avalanche averages to output
@@ -88,7 +88,7 @@ public class Encrypter {
 		return output;
 	}
 
-	private int[] avalanche(String plainText, String encryptedText, String key, AESType type, OutputFileWriter writer) {
+	private int[] avalanche(String plainText, String encryptedText, String key, AESType type) {
 		int plainTextChanges = 0;
 		int keyChanges = 0;
 
@@ -110,9 +110,19 @@ public class Encrypter {
 			String newString = sb1.toString();
 			String newKey = sb2.toString();
 
-			// encrypt the newString with key and type
-			String newTextEncryption = encrypt(newString, key, writer, type);
-			String newKeyEncryption = encrypt(plainText, newKey, writer, type);
+			// change Strings to byte arrays
+			byte[] textBytes = Helper.stringToByteArray(plainText);
+			byte[] keyBytes = Helper.stringToByteArray(key);
+			byte[] changedTextBytes = Helper.stringToByteArray(newString);
+			byte[] changedKeyBytes = Helper.stringToByteArray(newKey);
+			
+			// encrypt the new byte arrays
+			byte[][] newTextEncrypted = encryptByteArray(changedTextBytes, keyBytes, type);
+			byte[][] newKeyEncrypted = encryptByteArray(textBytes, changedKeyBytes, type);
+			
+			// change matrix to Strings
+			String newTextEncryption = Helper.matrixToString(newTextEncrypted, false);
+			String newKeyEncryption = Helper.matrixToString(newKeyEncrypted, false);
 			
 			// compare the new encrypted strings with encryptedText, add count of
 			// changes to plainTextChanges and keyChanges
