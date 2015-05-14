@@ -65,39 +65,41 @@ public class HelperTest {
 	public void testDecryptEncrypt() {
 		Encrypter enc = new Encrypter();
 		Decrypter dec = new Decrypter();
-		for (String testPlainTest : testData()) {
-			String cipherText = enc.encrypt(testPlainTest, sample128String,
-					null, AESType.AES0);
-			String decryptedCipherText = dec.decrypt(cipherText,
-					sample128String, null);
-			assertEquals(testPlainTest, decryptedCipherText);
+		for (String testKey : testData()) {
+			for (String testPlainTest : testData()) {
+				String cipherText = enc.encrypt(testPlainTest, testKey, null,
+						AESType.AES0);
+				String decryptedCipherText = dec.decrypt(cipherText, testKey,
+						null);
+				assertEquals(testPlainTest, decryptedCipherText);
+			}
 		}
 	}
-	
+
 	@Test
 	public void testShiftRows() {
-	    ShiftRows rowShifter = new ShiftRows();
-	    byte[][] encrypted;
-	    byte[][] decrypted;
-	    for (String testPlainText : testData()) {
-	        
-	        // change test String to byte matrix
-	        byte[] byteArray = Helper.stringToByteArray(testPlainText);
-	        byte[][] testBytes = Helper.arrayToMatrix(byteArray);
-	        
-	        // shift rows encryption on testPlainText
-	        encrypted = rowShifter.shiftRows(testBytes, false);
-	        
-	        // shift rows decryption on encrypted
-	        decrypted = rowShifter.shiftRows(encrypted, true);
-	        
-	        // change decrypted to String
-	        String plainText = Helper.matrixToString(testBytes, false);
-	        String decryptedText = Helper.matrixToString(decrypted, false);
-	        
-	        // check decryptedText = testPlainText
-	        assertEquals(decryptedText, plainText);
-	    }
+		ShiftRows rowShifter = new ShiftRows();
+		byte[][] encrypted;
+		byte[][] decrypted;
+		for (String testPlainText : testData()) {
+
+			// change test String to byte matrix
+			byte[] byteArray = Helper.stringToByteArray(testPlainText);
+			byte[][] testBytes = Helper.arrayToMatrix(byteArray);
+
+			// shift rows encryption on testPlainText
+			encrypted = rowShifter.shiftRows(testBytes, false);
+
+			// shift rows decryption on encrypted
+			decrypted = rowShifter.shiftRows(encrypted, true);
+
+			// change decrypted to String
+			String plainText = Helper.matrixToString(testBytes, false);
+			String decryptedText = Helper.matrixToString(decrypted, false);
+
+			// check decryptedText = testPlainText
+			assertEquals(decryptedText, plainText);
+		}
 	}
 
 	/**
