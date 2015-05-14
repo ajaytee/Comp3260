@@ -34,6 +34,12 @@ public class MixColumns {
 				for (int k = 0; k < 4; k++) {
 					String binaryInput = Integer.toBinaryString(input[k][i]);
 					
+					// Bug fix: Add missing zeros to binaryString
+					int missingZeros = 8 - binaryInput.length();
+			        for (int count = 0; count < missingZeros; count++) {
+			            binaryInput = "0" + binaryInput;
+			        }
+					
 					switch (matrix[j][k]) {		// check mix columns matrix value
 						case 1: results[k] = binaryInput; // x1 result = no change
 						case 2: results[k] = multiply2(binaryInput);
@@ -146,8 +152,6 @@ public class MixColumns {
 		for (int i = 0; i < missingZeros2; i++) {
 			bin2 = "0" + bin2;
 		}
-		System.out.println("binary1:    " + bin1);
-		System.out.println("binaryXOR:  " + bin2);
 		
 		// XOR both Strings
 		for (int i = 0; i < 8; i++) {
