@@ -29,8 +29,9 @@ public class OutputFileWriter {
 	private int aes2[];
 	private int aes3[];
 	private int aes4[];
+	private final Path outputFile;
 
-	public OutputFileWriter() {
+	public OutputFileWriter(Path outputFile) {
 		// sample data to be removed!
 		aes0 = new int[11];
 		aes1 = new int[11];
@@ -44,9 +45,10 @@ public class OutputFileWriter {
 			aes3[i] = 70 + i;
 			aes4[i] = 80 + i;
 		}
+		this.outputFile = outputFile;
 	}
 
-	public void writeToFile(Path outputFile) {
+	public void writeToFile() {
 		long duration = endTime - startTime;
 
 		List<String> lines = new ArrayList<String>();

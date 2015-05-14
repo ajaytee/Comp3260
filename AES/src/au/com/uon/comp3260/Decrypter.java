@@ -11,29 +11,35 @@ import au.com.uon.comp3260.util.OutputFileWriter;
  * 
  */
 public class Decrypter {
-	public Decrypter(Path inputFile, Path outputFile) {
-		this(Helper.readCipherText(inputFile), Helper.readKey(inputFile),
+
+	public void decrypt(Path inputFile, Path outputFile) {
+		decrypt(Helper.readCipherText(inputFile), Helper.readKey(inputFile),
 				outputFile);
 	}
 
-	public Decrypter(String cipherText, String key, Path outputFile) {
+	public String decrypt(String cipherText, String key, Path outputFile) {
 		long start = System.currentTimeMillis();
 		byte[] cipherTextByteArray = Helper.stringToByteArray(cipherText);
 		byte[] keyBytes = Helper.stringToByteArray(key);
-		byte[][] decrypted = decrypt(cipherTextByteArray, keyBytes);
+		byte[][] decrypted = decryptByteArray(cipherTextByteArray, keyBytes);
 		long end = System.currentTimeMillis();
-		OutputFileWriter writer = new OutputFileWriter();
-		writer.setKey(key);
-		writer.setPlainText(Helper.arrayToString(
-				Helper.matrixToArray(decrypted), false));
-		writer.setDecryption(false);
-		writer.setStartTime(start);
-		writer.setEndTime(end);
-		writer.setCipherText(cipherText);
-		writer.writeToFile(outputFile);
+
+		String plainText = Helper.arrayToString(
+				Helper.matrixToArray(decrypted), false);
+		if (outputFile != null) {
+			OutputFileWriter writer = new OutputFileWriter(outputFile);
+			writer.setKey(key);
+			writer.setPlainText(plainText);
+			writer.setDecryption(false);
+			writer.setStartTime(start);
+			writer.setEndTime(end);
+			writer.setCipherText(cipherText);
+			writer.writeToFile();
+		}
+		return plainText;
 	}
 
-	private byte[][] decrypt(byte[] cipherTextByteArray, byte[] key) {
+	public byte[][] decryptByteArray(byte[] cipherTextByteArray, byte[] key) {
 		// TODO: Andrew: We need to invert the key somehow. Do you know how that
 		// works?
 

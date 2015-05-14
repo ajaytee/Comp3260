@@ -19,11 +19,11 @@ public class Application {
 		Path inputFile = Paths.get(args[1]);
 		Path outputFile = Paths.get(args[2]);
 		if (args[0].equalsIgnoreCase("encrypt")) {
-			Encrypter enc = new Encrypter(inputFile, outputFile);
-			// start encryption
+			Encrypter enc = new Encrypter();
+			enc.encrypt(inputFile, outputFile);
 		} else if (args[0].equalsIgnoreCase("decrypt")) {
-			Decrypter dec = new Decrypter(inputFile, outputFile);
-			// start decryption
+			Decrypter dec = new Decrypter();
+			dec.decrypt(inputFile, outputFile);
 		} else {
 			usage();
 		}
