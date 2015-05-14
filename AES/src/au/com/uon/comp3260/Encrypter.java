@@ -44,55 +44,81 @@ public class Encrypter {
 		System.out.println(Helper.matrixToString(
 				Helper.arrayToMatrix(plainTextByteArray), true));
 		byte[] keyBytes = Helper.stringToByteArray(key);
-		byte[][] encrypted = encryptByteArray(plainTextByteArray, keyBytes,
+		byte[][][] encrypted = encryptByteArray(plainTextByteArray, keyBytes,
 				type);
 		System.out.println("Encrypted Bytes:");
-		System.out.println(Helper.matrixToString(encrypted, true));
+		System.out.println(Helper.matrixToString(encrypted[10], true));
 
 		// Calculate avalanche effect
-		String encryptedText = Helper.matrixToString(encrypted, false);
-		int[] roundAverages = avalanche(plainText, encryptedText, key, type);
-		int plainTextAverage = roundAverages[0];
-		int keyAverage = roundAverages[1];
-		// TODO: add avalanche averages to output
-		System.out.println("Round Averages - Plain Text: " + plainTextAverage
-				+ " Key: " + keyAverage);
+		String encryptedText[] = new String[11];
+		for (int round = 0; round < 11; round++) {
+			encryptedText[round] = Helper.matrixToString(encrypted[round],
+					false);
+		}
+		int[][] roundAverages = avalanche(plainText, encryptedText, key, type);
+
+		switch (type) {
+		case AES0:
+			writer.setAvalancheDataAes0(roundAverages);
+			break;
+		case AES1:
+			writer.setAvalancheDataAes1(roundAverages);
+			break;
+		case AES2:
+			writer.setAvalancheDataAes2(roundAverages);
+			break;
+		case AES3:
+			writer.setAvalancheDataAes3(roundAverages);
+			break;
+		case AES4:
+			writer.setAvalancheDataAes4(roundAverages);
+			break;
+		default:
+			break;
+		}
 
 		String cipherText = Helper.arrayToString(
-				Helper.matrixToArray(encrypted), false);
+				Helper.matrixToArray(encrypted[10]), false);
 		return cipherText;
 	}
 
-	public byte[][] encryptByteArray(byte[] inputArray, byte[] key, AESType type) {
+	public byte[][][] encryptByteArray(byte[] inputArray, byte[] key,
+			AESType type) {
 		byte[][] input = Helper.arrayToMatrix(inputArray);
 		AddRoundKey roundKeyAdder = new AddRoundKey(key);
 		SubstituteBytes byteSubstituter = new SubstituteBytes();
 		ShiftRows rowShifter = new ShiftRows();
 		MixColumns columnMixer = new MixColumns();
 
-		byte[][] output;
-		output = roundKeyAdder.addRoundKey(input, 0, false);
-		for (int round = 0; round < 10; round++) {
+		// 1. round, 2. row, 3. column
+		byte[][][] output = new byte[11][input.length][input[0].length];
+		output[0] = roundKeyAdder.addRoundKey(input, 0, false);
+		for (int round = 1; round < 11; round++) {
+			output[round] = output[round - 1];
 			if (!type.isSkipSubBytes()) {
-				output = byteSubstituter.substituteBytes(output, false);
+				output[round] = byteSubstituter.substituteBytes(output[round],
+						false);
 			}
 			if (!type.isSkipShiftRows()) {
-				output = rowShifter.shiftRows(output, false);
+				output[round] = rowShifter.shiftRows(output[round], false);
 			}
 			if (!type.isSkipMixColumns()) {
-				output = columnMixer.mixColumns(output, false);
+				output[round] = columnMixer.mixColumns(output[round], false);
 			}
 			if (!type.isSkipAddRoundKey()) {
-				output = roundKeyAdder.addRoundKey(output, round + 1, false);
+				output[round] = roundKeyAdder.addRoundKey(output[round], round,
+						false);
 			}
 		}
 		return output;
 	}
 
-	private int[] avalanche(String plainText, String encryptedText, String key,
-			AESType type) {
-		int plainTextChanges = 0;
-		int keyChanges = 0;
+	// 1 = 0 --> plaintext; 1=1 --> key
+	// 2. round;
+	private int[][] avalanche(String plainText, String[] encryptedText,
+			String key, AESType type) {
+		int plainTextChanges[] = new int[11];
+		int keyChanges[] = new int[11];
 
 		// change bits of plain text and key one at a time
 		String oneChar = "1";
@@ -119,31 +145,45 @@ public class Encrypter {
 			byte[] changedKeyBytes = Helper.stringToByteArray(newKey);
 
 			// encrypt the new byte arrays
-			byte[][] newTextEncrypted = encryptByteArray(changedTextBytes,
+			byte[][][] newTextEncrypted = encryptByteArray(changedTextBytes,
 					keyBytes, type);
-			byte[][] newKeyEncrypted = encryptByteArray(textBytes,
+			byte[][][] newKeyEncrypted = encryptByteArray(textBytes,
 					changedKeyBytes, type);
 
-			// change matrix to Strings
-			String newTextEncryption = Helper.matrixToString(newTextEncrypted,
-					false);
-			String newKeyEncryption = Helper.matrixToString(newKeyEncrypted,
-					false);
+			for (int round = 0; round < 11; round++) {
+				// change matrix to Strings
+				String newTextEncryption = Helper.matrixToString(
+						newTextEncrypted[round], false);
+				String newKeyEncryption = Helper.matrixToString(
+						newKeyEncrypted[round], false);
 
-			// compare the new encrypted strings with encryptedText, add count
-			// of
-			// changes to plainTextChanges and keyChanges
-			for (int j = 0; j < plainText.length(); j++) {
-				if (newTextEncryption.charAt(j) == encryptedText.charAt(j)) {
-					plainTextChanges++;
-				}
-				if (newKeyEncryption.charAt(j) == encryptedText.charAt(j)) {
-					keyChanges++;
+				System.out.println("\n\n Avalanche for " + type.getName()
+						+ " Round: " + round + ":\n" + newTextEncryption
+						+ "\n Original:\n" + encryptedText[round]);
+				// compare the new encrypted strings with encryptedText, add
+				// count
+				// of
+				// changes to plainTextChanges and keyChanges
+				for (int j = 0; j < plainText.length(); j++) {
+					if (newTextEncryption.charAt(j) != encryptedText[round]
+							.charAt(j)) {
+						plainTextChanges[round]++;
+					}
+					if (newKeyEncryption.charAt(j) != encryptedText[round]
+							.charAt(j)) {
+						keyChanges[round]++;
+					}
 				}
 			}
 		}
-		int plainTextAvg = plainTextChanges / plainText.length();
-		int keyAvg = keyChanges / plainText.length();
-		return new int[] { plainTextAvg, keyAvg };
+
+		int plainTextAvg[] = new int[11];
+		int keyAvg[] = new int[11];
+		int textLength = plainText.length();
+		for (int round = 0; round < 11; round++) {
+			plainTextAvg[round] = plainTextChanges[round] / textLength;
+			keyAvg[round] = keyChanges[round] / textLength;
+		}
+		return new int[][] { plainTextAvg, keyAvg };
 	}
 }

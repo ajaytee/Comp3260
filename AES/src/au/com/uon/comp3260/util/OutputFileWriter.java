@@ -24,27 +24,14 @@ public class OutputFileWriter {
 	private String cipherText;
 	private long startTime;
 	private long endTime;
-	private int aes0[];
-	private int aes1[];
-	private int aes2[];
-	private int aes3[];
-	private int aes4[];
+	private int aes0[][];
+	private int aes1[][];
+	private int aes2[][];
+	private int aes3[][];
+	private int aes4[][];
 	private final Path outputFile;
 
 	public OutputFileWriter(Path outputFile) {
-		// sample data to be removed!
-		aes0 = new int[11];
-		aes1 = new int[11];
-		aes2 = new int[11];
-		aes3 = new int[11];
-		aes4 = new int[11];
-		for (int i = 0; i < 11; i++) {
-			aes0[i] = 40 + i;
-			aes1[i] = 50 + i;
-			aes2[i] = 60 + i;
-			aes3[i] = 70 + i;
-			aes4[i] = 80 + i;
-		}
 		this.outputFile = outputFile;
 	}
 
@@ -69,8 +56,8 @@ public class OutputFileWriter {
 				roundString = round + "   ";
 			}
 			lines.add(String.format("%s %d   %d   %d   %d   %d", roundString,
-					aes0[round], aes1[round], aes2[round], aes3[round],
-					aes4[round]));
+					aes0[0][round], aes1[0][round], aes2[0][round],
+					aes3[0][round], aes4[0][round]));
 		}
 		lines.add("\nP under K and Ki\nRound AES0 AES1 AES2 AES3 AES4");
 		for (int round = 0; round < 11; round++) {
@@ -79,8 +66,8 @@ public class OutputFileWriter {
 				roundString = round + "   ";
 			}
 			lines.add(String.format("%s %d   %d   %d   %d   %d", roundString,
-					aes0[round], aes1[round], aes2[round], aes3[round],
-					aes4[round]));
+					aes0[1][round], aes1[1][round], aes2[1][round],
+					aes3[1][round], aes4[1][round]));
 		}
 
 		try {
@@ -115,40 +102,44 @@ public class OutputFileWriter {
 		this.endTime = endTime;
 	}
 
-	public void setAvalancheDataAes0(int[] aes0) {
-		if (aes0.length != 11) {
+	public void setAvalancheDataAes0(int[][] aes0) {
+		if (aes0.length != 2) {
+			throw new RuntimeException(
+					"Avalanche Data must have plain text and key data");
+		}
+		if (aes0[0].length != 11) {
 			throw new RuntimeException(
 					"Avalanche Data must have 11 data entries");
 		}
 		this.aes0 = aes0;
 	}
 
-	public void setAvalancheDataAes1(int[] aes1) {
-		if (aes1.length != 11) {
+	public void setAvalancheDataAes1(int[][] aes1) {
+		if (aes1[0].length != 11) {
 			throw new RuntimeException(
 					"Avalanche Data must have 11 data entries");
 		}
 		this.aes1 = aes1;
 	}
 
-	public void setAvalancheDataAes2(int[] aes2) {
-		if (aes2.length != 11) {
+	public void setAvalancheDataAes2(int[][] aes2) {
+		if (aes2[0].length != 11) {
 			throw new RuntimeException(
 					"Avalanche Data must have 11 data entries");
 		}
 		this.aes2 = aes2;
 	}
 
-	public void setAvalancheDataAes3(int[] aes3) {
-		if (aes3.length != 11) {
+	public void setAvalancheDataAes3(int[][] aes3) {
+		if (aes3[0].length != 11) {
 			throw new RuntimeException(
 					"Avalanche Data must have 11 data entries");
 		}
 		this.aes3 = aes3;
 	}
 
-	public void setAvalancheDataAes4(int[] aes4) {
-		if (aes4.length != 11) {
+	public void setAvalancheDataAes4(int[][] aes4) {
+		if (aes4[0].length != 11) {
 			throw new RuntimeException(
 					"Avalanche Data must have 11 data entries");
 		}
