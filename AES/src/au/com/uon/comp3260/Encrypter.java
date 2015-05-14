@@ -55,7 +55,8 @@ public class Encrypter {
 		int plainTextAverage = roundAverages[0];
 		int keyAverage = roundAverages[1];
 		// TODO: add avalanche averages to output
-		System.out.println("Round Averages - Plain Text: " + plainTextAverage + " Key: " + keyAverage);
+		System.out.println("Round Averages - Plain Text: " + plainTextAverage
+				+ " Key: " + keyAverage);
 
 		String cipherText = Helper.arrayToString(
 				Helper.matrixToArray(encrypted), false);
@@ -64,13 +65,13 @@ public class Encrypter {
 
 	public byte[][] encryptByteArray(byte[] inputArray, byte[] key, AESType type) {
 		byte[][] input = Helper.arrayToMatrix(inputArray);
-		AddRoundKey roundKeyAdder = new AddRoundKey();
+		AddRoundKey roundKeyAdder = new AddRoundKey(key);
 		SubstituteBytes byteSubstituter = new SubstituteBytes();
 		ShiftRows rowShifter = new ShiftRows();
 		MixColumns columnMixer = new MixColumns();
 
 		byte[][] output;
-		output = roundKeyAdder.addRoundKey(input, key);
+		output = roundKeyAdder.addRoundKey(input, 0, false);
 		for (int round = 0; round < 10; round++) {
 			if (!type.isSkipSubBytes()) {
 				output = byteSubstituter.substituteBytes(output, false);
@@ -82,13 +83,14 @@ public class Encrypter {
 				output = columnMixer.mixColumns(output, false);
 			}
 			if (!type.isSkipAddRoundKey()) {
-				output = roundKeyAdder.addRoundKey(output, key);
+				output = roundKeyAdder.addRoundKey(output, round + 1, false);
 			}
 		}
 		return output;
 	}
 
-	private int[] avalanche(String plainText, String encryptedText, String key, AESType type) {
+	private int[] avalanche(String plainText, String encryptedText, String key,
+			AESType type) {
 		int plainTextChanges = 0;
 		int keyChanges = 0;
 
@@ -115,24 +117,29 @@ public class Encrypter {
 			byte[] keyBytes = Helper.stringToByteArray(key);
 			byte[] changedTextBytes = Helper.stringToByteArray(newString);
 			byte[] changedKeyBytes = Helper.stringToByteArray(newKey);
-			
+
 			// encrypt the new byte arrays
-			byte[][] newTextEncrypted = encryptByteArray(changedTextBytes, keyBytes, type);
-			byte[][] newKeyEncrypted = encryptByteArray(textBytes, changedKeyBytes, type);
-			
+			byte[][] newTextEncrypted = encryptByteArray(changedTextBytes,
+					keyBytes, type);
+			byte[][] newKeyEncrypted = encryptByteArray(textBytes,
+					changedKeyBytes, type);
+
 			// change matrix to Strings
-			String newTextEncryption = Helper.matrixToString(newTextEncrypted, false);
-			String newKeyEncryption = Helper.matrixToString(newKeyEncrypted, false);
-			
-			// compare the new encrypted strings with encryptedText, add count of
+			String newTextEncryption = Helper.matrixToString(newTextEncrypted,
+					false);
+			String newKeyEncryption = Helper.matrixToString(newKeyEncrypted,
+					false);
+
+			// compare the new encrypted strings with encryptedText, add count
+			// of
 			// changes to plainTextChanges and keyChanges
 			for (int j = 0; j < plainText.length(); j++) {
-			    if (newTextEncryption.charAt(j) == encryptedText.charAt(j)) {
-			        plainTextChanges++;
-			    }
-			    if (newKeyEncryption.charAt(j) == encryptedText.charAt(j)) {
-			        keyChanges++;
-			    }
+				if (newTextEncryption.charAt(j) == encryptedText.charAt(j)) {
+					plainTextChanges++;
+				}
+				if (newKeyEncryption.charAt(j) == encryptedText.charAt(j)) {
+					keyChanges++;
+				}
 			}
 		}
 		int plainTextAvg = plainTextChanges / plainText.length();

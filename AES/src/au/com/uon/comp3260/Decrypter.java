@@ -44,18 +44,18 @@ public class Decrypter {
 		// works?
 
 		byte[][] input = Helper.arrayToMatrix(cipherTextByteArray);
-		AddRoundKey roundKeyAdder = new AddRoundKey();
+		AddRoundKey roundKeyAdder = new AddRoundKey(key);
 		SubstituteBytes byteSubstituter = new SubstituteBytes();
 		ShiftRows rowShifter = new ShiftRows();
 		MixColumns columnMixer = new MixColumns();
 
 		byte[][] output;
-		output = roundKeyAdder.addRoundKey(input, key);
+		output = roundKeyAdder.addRoundKey(input, 0, true);
 		for (int round = 0; round < 10; round++) {
 			output = byteSubstituter.substituteBytes(output, true);
 			output = rowShifter.shiftRows(output, true);
 			output = columnMixer.mixColumns(output, true);
-			output = roundKeyAdder.addRoundKey(output, key);
+			output = roundKeyAdder.addRoundKey(output, round + 1, true);
 		}
 		return output;
 	}
