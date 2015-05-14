@@ -11,6 +11,7 @@ import org.junit.Test;
 import au.com.uon.comp3260.AESType;
 import au.com.uon.comp3260.Decrypter;
 import au.com.uon.comp3260.Encrypter;
+import au.com.uon.comp3260.ShiftRows;
 
 /**
  * @author Felix Behrendt
@@ -71,6 +72,32 @@ public class HelperTest {
 					sample128String, null);
 			assertEquals(testPlainTest, decryptedCipherText);
 		}
+	}
+	
+	@Test
+	public void testShiftRows() {
+	    ShiftRows rowShifter = new ShiftRows();
+	    byte[][] encrypted;
+	    byte[][] decrypted;
+	    for (String testPlainText : testData()) {
+	        
+	        // change test String to byte matrix
+	        byte[] byteArray = Helper.stringToByteArray(testPlainText);
+	        byte[][] testBytes = Helper.arrayToMatrix(byteArray);
+	        
+	        // shift rows encryption on testPlainText
+	        encrypted = rowShifter.shiftRows(testBytes, false);
+	        
+	        // shift rows decryption on encrypted
+	        decrypted = rowShifter.shiftRows(encrypted, true);
+	        
+	        // change decrypted to String
+	        String plainText = Helper.matrixToString(testBytes, false);
+	        String decryptedText = Helper.matrixToString(decrypted, false);
+	        
+	        // check decryptedText = testPlainText
+	        assertEquals(decryptedText, plainText);
+	    }
 	}
 
 	/**
