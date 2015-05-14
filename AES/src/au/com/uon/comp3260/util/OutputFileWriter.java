@@ -115,23 +115,43 @@ public class OutputFileWriter {
 		this.endTime = endTime;
 	}
 
-	public void setAes0(int[] aes0) {
+	public void setAvalancheDataAes0(int[] aes0) {
+		if (aes0.length != 11) {
+			throw new RuntimeException(
+					"Avalanche Data must have 11 data entries");
+		}
 		this.aes0 = aes0;
 	}
 
-	public void setAes1(int[] aes1) {
+	public void setAvalancheDataAes1(int[] aes1) {
+		if (aes1.length != 11) {
+			throw new RuntimeException(
+					"Avalanche Data must have 11 data entries");
+		}
 		this.aes1 = aes1;
 	}
 
-	public void setAes2(int[] aes2) {
+	public void setAvalancheDataAes2(int[] aes2) {
+		if (aes2.length != 11) {
+			throw new RuntimeException(
+					"Avalanche Data must have 11 data entries");
+		}
 		this.aes2 = aes2;
 	}
 
-	public void setAes3(int[] aes3) {
+	public void setAvalancheDataAes3(int[] aes3) {
+		if (aes3.length != 11) {
+			throw new RuntimeException(
+					"Avalanche Data must have 11 data entries");
+		}
 		this.aes3 = aes3;
 	}
 
-	public void setAes4(int[] aes4) {
+	public void setAvalancheDataAes4(int[] aes4) {
+		if (aes4.length != 11) {
+			throw new RuntimeException(
+					"Avalanche Data must have 11 data entries");
+		}
 		this.aes4 = aes4;
 	}
 
