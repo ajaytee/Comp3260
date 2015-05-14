@@ -67,9 +67,10 @@ public class SubstituteBytes {
 			// Use the inverted matrix when decrypting
 			matrix = inversedSubByteMatrix;
 		}
+		byte[][] output = input;
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 4; j++)
-				input[i][j] = (byte) matrix[input[i][j] & 0xFF];
-		return input;
+				output[i][j] = (byte) matrix[input[i][j] & 0xFF];
+		return output;
 	}
 }
