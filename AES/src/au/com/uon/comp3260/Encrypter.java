@@ -51,10 +51,11 @@ public class Encrypter {
 
 		// Calculate avalanche effect
 		String encryptedText = Helper.matrixToString(encrypted, false);
-		int[] roundAverages = avalanche(plainText, encryptedText, key);
+		int[] roundAverages = avalanche(plainText, encryptedText, key, type, writer);
 		int plainTextAverage = roundAverages[0];
 		int keyAverage = roundAverages[1];
 		// TODO: add avalanche averages to output
+		System.out.println("Round Averages - Plain Text: " + plainTextAverage + " Key: " + keyAverage);
 
 		String cipherText = Helper.arrayToString(
 				Helper.matrixToArray(encrypted), false);
@@ -83,40 +84,46 @@ public class Encrypter {
 			if (!type.isSkipAddRoundKey()) {
 				output = roundKeyAdder.addRoundKey(output, key);
 			}
-			// TODO Calculate Avalange Effect and add data to output file writer
-
 		}
 		return output;
 	}
 
-	private int[] avalanche(String plainText, String encryptedText, String key) {
+	private int[] avalanche(String plainText, String encryptedText, String key, AESType type, OutputFileWriter writer) {
 		int plainTextChanges = 0;
 		int keyChanges = 0;
 
 		// change bits of plain text and key one at a time
 		String oneChar = "1";
 		for (int i = 0; i < plainText.length(); i++) {
-			StringBuilder newString = new StringBuilder(plainText);
-			StringBuilder newKey = new StringBuilder(key);
+			StringBuilder sb1 = new StringBuilder(plainText);
+			StringBuilder sb2 = new StringBuilder(key);
 			if (plainText.charAt(i) == oneChar.charAt(0)) { // if char is a 1
-				newString.setCharAt(i, '0'); // change to 0
+				sb1.setCharAt(i, '0'); // change to 0
 			} else {
-				newString.setCharAt(i, '1'); // if 0, change to 1
+				sb1.setCharAt(i, '1'); // if 0, change to 1
 			}
 			if (key.charAt(i) == oneChar.charAt(0)) {
-				newKey.setCharAt(i, '0');
+				sb2.setCharAt(i, '0');
 			} else {
-				newKey.setCharAt(i, '1');
+				sb2.setCharAt(i, '1');
 			}
+			String newString = sb1.toString();
+			String newKey = sb2.toString();
 
-			// encrypt the newString with key
-			// compare the new encrypted string with encryptedText, add count of
-			// changes to plainTextChanges
-
-			// encrypt plainText with newKey
-			// compare the new encrypted string with encryptedText, add count of
-			// changes to keyChanges
-
+			// encrypt the newString with key and type
+			String newTextEncryption = encrypt(newString, key, writer, type);
+			String newKeyEncryption = encrypt(plainText, newKey, writer, type);
+			
+			// compare the new encrypted strings with encryptedText, add count of
+			// changes to plainTextChanges and keyChanges
+			for (int j = 0; j < plainText.length(); j++) {
+			    if (newTextEncryption.charAt(j) == encryptedText.charAt(j)) {
+			        plainTextChanges++;
+			    }
+			    if (newKeyEncryption.charAt(j) == encryptedText.charAt(j)) {
+			        keyChanges++;
+			    }
+			}
 		}
 		int plainTextAvg = plainTextChanges / plainText.length();
 		int keyAvg = keyChanges / plainText.length();
