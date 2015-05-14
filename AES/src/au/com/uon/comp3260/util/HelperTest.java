@@ -8,6 +8,10 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import au.com.uon.comp3260.AESType;
+import au.com.uon.comp3260.Decrypter;
+import au.com.uon.comp3260.Encrypter;
+
 /**
  * @author Felix Behrendt
  * 
@@ -54,6 +58,19 @@ public class HelperTest {
 		int diffsInverted = Helper.numberOfDifferentBits(testArr1s, testArr0s);
 		assertEquals(128, diffs);
 		assertEquals(128, diffsInverted);
+	}
+
+	@Test
+	public void testDecryptEncrypt() {
+		Encrypter enc = new Encrypter();
+		Decrypter dec = new Decrypter();
+		for (String testPlainTest : testData()) {
+			String cipherText = enc.encrypt(testPlainTest, sample128String,
+					null, AESType.AES0);
+			String decryptedCipherText = dec.decrypt(cipherText,
+					sample128String, null);
+			assertEquals(testPlainTest, decryptedCipherText);
+		}
 	}
 
 	/**
