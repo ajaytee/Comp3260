@@ -9,34 +9,19 @@ package au.com.uon.comp3260;
 public class ShiftRows {
 
 	public byte[][] shiftRows(byte[][] input, boolean decrypt) {
-
-		byte[][] output = new byte[4][4];
-
-		if (!decrypt) {
-			// shift left - encryption
-			for (int i = 1; i < 4; i++) { // initialise i to 1 as Row 0 remains
-											// unchanged
-				for (int j = 0; j < 4; j++) { // i = rows, j = columns
-					int newColumn = j - i;
-					if (newColumn < 0) {
-						newColumn = newColumn + 4; // circular shift
-					}
-					output[i][newColumn] = input[i][j];
+		byte[] temp = new byte[4];
+		for (int i = 1; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				if (decrypt) {
+					temp[(j + i) % 4] = input[i][j];
+				} else {
+					temp[j] = input[i][(j + i) % 4];
 				}
 			}
-
-		} else {
-			// shift right - decryption
-			for (int i = 1; i < 4; i++) {
-				for (int j = 0; j < 4; j++) {
-					int newColumn = j + i;
-					if (newColumn > 3) {
-						newColumn = newColumn - 4;
-					}
-					output[i][newColumn] = input[i][j];
-				}
-			}
+			for (int j = 0; j < 4; j++)
+				input[i][j] = temp[j];
 		}
-		return output;
+		return input;
+
 	}
 }
