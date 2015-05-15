@@ -9,6 +9,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import au.com.uon.comp3260.AESType;
+import au.com.uon.comp3260.AddRoundKey;
 import au.com.uon.comp3260.Decrypter;
 import au.com.uon.comp3260.Encrypter;
 import au.com.uon.comp3260.MixColumns;
@@ -102,6 +103,85 @@ public class HelperTest {
 			// check decryptedText = testPlainText
 			assertEquals(decryptedText, plainText);
 		}
+	}
+
+	@Test
+	public void testAddRoundKeyEncryption() {
+		byte[][] keyMatrix = Helper
+				.hexStringToMatrix("00000000000000000000000000000000");
+		byte[] key = Helper.matrixToArray(keyMatrix);
+		AddRoundKey roundKeyAdder = new AddRoundKey(key);
+
+		byte[][] input = Helper
+				.hexStringToMatrix("00000000000000000000000000000000");
+		byte[][] output = roundKeyAdder.addRoundKey(input, 0, false);
+		assertEquals("00000000000000000000000000000000",
+				Helper.matrixToHexString(output));
+
+		input = Helper.hexStringToMatrix("63636363636363636363636363636363");
+		output = roundKeyAdder.addRoundKey(input, 1, false);
+		assertEquals("01000000010000000100000001000000",
+				Helper.matrixToHexString(output));
+
+		input = Helper.hexStringToMatrix("5D7C7C425D7C7C425D7C7C425D7C7C42");
+		output = roundKeyAdder.addRoundKey(input, 2, false);
+		assertEquals("C6E4E48BA48787E8C6E4E48BA48787E8",
+				Helper.matrixToHexString(output));
+
+		input = Helper.hexStringToMatrix("B8BAC794039F49DFB8BAC794039F49DF");
+		output = roundKeyAdder.addRoundKey(input, 3, false);
+		assertEquals("282DF3C46AF386254A4E90A70890E546",
+				Helper.matrixToHexString(output));
+
+		input = Helper.hexStringToMatrix("45D41785B030A0C8253EED720B0B8474");
+		output = roundKeyAdder.addRoundKey(input, 4, false);
+		assertEquals("ABD2CDFE375AB54950A0AFC0759A6A5F",
+				Helper.matrixToHexString(output));
+
+		input = Helper.hexStringToMatrix("AB4164E4ADFCA83AF3DFC7868A324CB3");
+		output = roundKeyAdder.addRoundKey(input, 5, false);
+		assertEquals("D46F4F6C55B896337E05BB3D7979DE23",
+				Helper.matrixToHexString(output));
+
+		input = Helper.hexStringToMatrix("E8938112135D5DC97BD008A123714CB7");
+		output = roundKeyAdder.addRoundKey(input, 6, false);
+		assertEquals("04F2CA9707782845E22F019649C5D710",
+				Helper.matrixToHexString(output));
+
+		input = Helper.hexStringToMatrix("96DFF34228754F44C03D64BD52FE71CB");
+		output = roundKeyAdder.addRoundKey(input, 7, false);
+		assertEquals("B7AAE4C51D252D4F6C920F8194E58150",
+				Helper.matrixToHexString(output));
+
+		input = Helper.hexStringToMatrix("2D1E8F0F288802E33DC6CC537F1E310A");
+		output = roundKeyAdder.addRoundKey(input, 8, false);
+		assertEquals("23E78C3C132163DBAAC0C6572E03CB95",
+				Helper.matrixToHexString(output));
+
+		input = Helper.hexStringToMatrix("CE2AD677DBD8DFEF134FCF99654FA58A");
+		output = roundKeyAdder.addRoundKey(input, 9, false);
+		assertEquals("7FFE0E9551A566350E347C472929ECCB",
+				Helper.matrixToHexString(output));
+
+		input = Helper.hexStringToMatrix("D206101FD118CE2AABA5AB96A5BB33A0");
+		output = roundKeyAdder.addRoundKey(input, 10, false);
+		assertEquals("66E94BD4EF8A2C3B884CFA59CA342B2E",
+				Helper.matrixToHexString(output));
+	}
+
+	@Test
+	public void testAddRoundKeyDecryption() {
+		byte[][] keyMatrix = Helper
+				.hexStringToMatrix("00000000000000000000000000000000");
+		byte[] key = Helper.matrixToArray(keyMatrix);
+		AddRoundKey roundKeyAdder = new AddRoundKey(key);
+
+		byte[][] input = Helper
+				.hexStringToMatrix("66E94BD4EF8A2C3B884CFA59CA342B2E");
+		byte[][] output = roundKeyAdder.addRoundKey(input, 0, true);
+		assertEquals("D206101FD118CE2AABA5AB96A5BB33A0",
+				Helper.matrixToHexString(output));
+
 	}
 
 	@Test
