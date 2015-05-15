@@ -24,7 +24,47 @@ public class AddRoundKey {
 			subkeys[round] = subkey;
 		}
 
-		// TODO
+		// Key expansion
+		
+		int round = 0;
+		int rounds = 10;
+		int i = 16;
+		byte[] tempBytes = new byte[4];
+		
+		while (i < 176) { // need 176 bytes of key
+		    
+		    round++;
+		    // set next set of temp bytes
+		    for (int j = 0; j < 4; j++) {
+		        tempBytes[j] = subkeys[round-1][j+12]; // tempBytes = last 4 bytes of previous subkey
+		        // for Round 1:
+		        // tempBytes[0] = subkeys[0][12]
+		        // tempBytes[1] = subkeys[0][13]
+		        // tempBytes[2] = subkeys[0][14]
+		        // tempBytes[3] = subkeys[0][15]
+		    }
+		    
+		    // if i / 16 gives no remainder = new Key
+		    if (i % 16 == 0) {
+		        // TODO: rotate temp, then apply s-box, then XOR with rcon(i)
+		        
+		    }
+		    
+		    // set next 4 bytes of subkey
+		    for (int j = 0; j < 4; j++) {
+		        
+		        // TODO: setting new 4 values in subkey
+		        //subkeys[round][(i % 16)] =   // i % 16 gives new key position
+		        
+		        // May have to do this in 'words' as opposed to bytes, words are just groups of 4 bytes
+		        // subkey[1][0] = subkey[0][0] ^ tempBytes[0]
+		        // subkey[
+		    }
+		}
+		
+		
+		
+		
 		return subkeys;
 	}
 
