@@ -17,6 +17,7 @@ public class Application {
 			return;
 		}
 		Path inputFile = Paths.get(args[1]);
+		System.out.println(inputFile);
 		Path outputFile = Paths.get(args[2]);
 		if (args[0].equalsIgnoreCase("encrypt")) {
 			Encrypter enc = new Encrypter();
