@@ -12,6 +12,7 @@ import au.com.uon.comp3260.AESType;
 import au.com.uon.comp3260.Decrypter;
 import au.com.uon.comp3260.Encrypter;
 import au.com.uon.comp3260.ShiftRows;
+import au.com.uon.comp3260.SubstituteBytes;
 
 /**
  * @author Felix Behrendt
@@ -100,6 +101,53 @@ public class HelperTest {
 			// check decryptedText = testPlainText
 			assertEquals(decryptedText, plainText);
 		}
+	}
+
+	@Test
+	public void testSubstituteBytes() {
+		SubstituteBytes byteSubstituter = new SubstituteBytes();
+		byte[][] input = Helper
+				.hexStringToMatrix("00000000000000000000000000000000");
+		byte[][] output = byteSubstituter.substituteBytes(input, false);
+		assertEquals("63636363636363636363636363636363",
+				Helper.matrixToHexString(output));
+
+		input = Helper.hexStringToMatrix("01000000010000000100000001000000");
+		output = byteSubstituter.substituteBytes(input, false);
+		assertEquals("7C6363637C6363637C6363637C636363",
+				Helper.matrixToHexString(output));
+
+		input = Helper.hexStringToMatrix("D46F4F6C55B896337E05BB3D7979DE23");
+		output = byteSubstituter.substituteBytes(input, false);
+		assertEquals("48A88450FC6C90C3F36BEA27B6B61D26",
+				Helper.matrixToHexString(output));
+
+		input = Helper.hexStringToMatrix("04F2CA9707782845E22F019649C5D710");
+		output = byteSubstituter.substituteBytes(input, false);
+		assertEquals("F2897488C5BC346E98157C903BA60ECA",
+				Helper.matrixToHexString(output));
+
+		input = Helper.hexStringToMatrix("B7AAE4C51D252D4F6C920F8194E58150");
+		output = byteSubstituter.substituteBytes(input, false);
+		assertEquals("A9AC69A6A43FD884504F760C22D90C53",
+				Helper.matrixToHexString(output));
+
+		input = Helper.hexStringToMatrix("23E78C3C132163DBAAC0C6572E03CB95");
+		output = byteSubstituter.substituteBytes(input, false);
+		assertEquals("269464EB7DFDFBB9ACBAB45B317B1F2A",
+				Helper.matrixToHexString(output));
+
+		// Decrypt
+		input = Helper.hexStringToMatrix("A9AC69A6A43FD884504F760C22D90C53");
+		output = byteSubstituter.substituteBytes(input, true);
+		assertEquals("B7AAE4C51D252D4F6C920F8194E58150",
+				Helper.matrixToHexString(output));
+
+		// Decrypt
+		input = Helper.hexStringToMatrix("269464EB7DFDFBB9ACBAB45B317B1F2A");
+		output = byteSubstituter.substituteBytes(input, true);
+		assertEquals("23E78C3C132163DBAAC0C6572E03CB95",
+				Helper.matrixToHexString(output));
 	}
 
 	/**

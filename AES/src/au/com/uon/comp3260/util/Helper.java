@@ -175,6 +175,23 @@ public class Helper {
 		return sb.toString();
 	}
 
+	public static String matrixToHexString(byte[][] matrix) {
+		byte[] array = matrixToArray(matrix);
+		StringBuilder sb = new StringBuilder();
+		for (byte b : array)
+			sb.append(String.format("%02x", b & 0xff));
+		return sb.toString().toUpperCase();
+	}
+
+	public static byte[][] hexStringToMatrix(String input) {
+		byte[] output = new byte[16];
+		for (int i = 0; i < 16; i++) {
+			String part = input.substring(i * 2, (i + 1) * 2);
+			output[i] = (byte) Integer.parseInt(part, 16);
+		}
+		return Helper.arrayToMatrix(output);
+	}
+
 	/**
 	 * Formats a byte to a string with a length of 8. If the byte is smaller
 	 * than 128 (=7 bytes) the string will be padded with leading 0s.
