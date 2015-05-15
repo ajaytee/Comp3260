@@ -11,6 +11,7 @@ import org.junit.Test;
 import au.com.uon.comp3260.AESType;
 import au.com.uon.comp3260.Decrypter;
 import au.com.uon.comp3260.Encrypter;
+import au.com.uon.comp3260.MixColumns;
 import au.com.uon.comp3260.ShiftRows;
 import au.com.uon.comp3260.SubstituteBytes;
 
@@ -101,6 +102,78 @@ public class HelperTest {
 			// check decryptedText = testPlainText
 			assertEquals(decryptedText, plainText);
 		}
+	}
+
+	@Test
+	public void testShiftRows2() {
+		ShiftRows rowShifter = new ShiftRows();
+
+		byte[][] input = Helper
+				.hexStringToMatrix("63636363636363636363636363636363");
+		byte[][] output = rowShifter.shiftRows(input, false);
+		assertEquals("63636363636363636363636363636363",
+				Helper.matrixToHexString(output));
+
+		input = Helper.hexStringToMatrix("7C6363637C6363637C6363637C636363");
+		output = rowShifter.shiftRows(input, false);
+		assertEquals("7C6363637C6363637C6363637C636363",
+				Helper.matrixToHexString(output));
+
+		input = Helper.hexStringToMatrix("34D80D1C020D443FD62F605C3060D95A");
+		output = rowShifter.shiftRows(input, false);
+		assertEquals("340D605A022FD91CD6600D3F30D8445C",
+				Helper.matrixToHexString(output));
+
+		// Decrypion
+		input = Helper.hexStringToMatrix("340D605A022FD91CD6600D3F30D8445C");
+		output = rowShifter.shiftRows(input, true);
+		assertEquals("34D80D1C020D443FD62F605C3060D95A",
+				Helper.matrixToHexString(output));
+
+		// Decryption
+		input = Helper.hexStringToMatrix("7C6363637C6363637C6363637C636363");
+		output = rowShifter.shiftRows(input, true);
+		assertEquals("7C6363637C6363637C6363637C636363",
+				Helper.matrixToHexString(output));
+
+	}
+
+	@Test
+	public void testMixColumns() {
+		MixColumns columnMixer = new MixColumns();
+
+		byte[][] input = Helper
+				.hexStringToMatrix("63636363636363636363636363636363");
+		byte[][] output = columnMixer.mixColumns(input, false);
+		assertEquals("63636363636363636363636363636363",
+				Helper.matrixToHexString(output));
+
+		input = Helper.hexStringToMatrix("7C6363637C6363637C6363637C636363");
+		output = columnMixer.mixColumns(input, false);
+		assertEquals("5D7C7C425D7C7C425D7C7C425D7C7C42",
+				Helper.matrixToHexString(output));
+
+		input = Helper.hexStringToMatrix("B417699B4969173DB417699B4969173D");
+		output = columnMixer.mixColumns(input, false);
+		assertEquals("B8BAC794039F49DFB8BAC794039F49DF",
+				Helper.matrixToHexString(output));
+
+		input = Helper.hexStringToMatrix("340D605A022FD91CD6600D3F30D8445C");
+		output = columnMixer.mixColumns(input, false);
+		assertEquals("45D41785B030A0C8253EED720B0B8474",
+				Helper.matrixToHexString(output));
+
+		// Decryption
+		input = Helper.hexStringToMatrix("45D41785B030A0C8253EED720B0B8474");
+		output = columnMixer.mixColumns(input, true);
+		assertEquals("340D605A022FD91CD6600D3F30D8445C",
+				Helper.matrixToHexString(output));
+
+		// Decryption
+		input = Helper.hexStringToMatrix("5D7C7C425D7C7C425D7C7C425D7C7C42");
+		output = columnMixer.mixColumns(input, true);
+		assertEquals("7C6363637C6363637C6363637C636363",
+				Helper.matrixToHexString(output));
 	}
 
 	@Test
