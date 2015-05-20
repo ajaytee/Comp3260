@@ -80,14 +80,15 @@ public class AddRoundKey {
 				// change temp from byte to int
 				int tempInt = temp[j];
 
-				// change subkey value from byte to int
-				int subkeyInt = subkeys[round - 2][i - ((round - 1) * 16)];
+				// change subkey value (from previous key) from byte to int
+				int subkeyInt = subkeys[round - 1][i - (round * 16)];
 
 				int subkey = subkeyInt ^ tempInt;
-				i++;
 
 				// convert from int to byte and store
-				subkeys[round - 1][i - ((round - 1) * 16)] = (byte) subkey;
+				subkeys[round][i - (round * 16)] = (byte) subkey;
+				
+				i++;
 			}
 		}
 
@@ -123,11 +124,10 @@ public class AddRoundKey {
 		// change input to string
 		String binaryInput = Integer.toBinaryString(input);
 
-		// multiply by 2
 		StringBuilder sb = new StringBuilder();
 
 		// shift binary left by 1
-		for (int i = 1; i < 8; i++) { // ignore first digit
+		for (int i = 1; i < binaryInput.length(); i++) { // ignore first digit
 			sb.append(binaryInput.charAt(i));
 		}
 		sb.append("0"); // add last digit
