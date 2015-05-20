@@ -110,7 +110,7 @@ public class HelperTest {
 		byte[][] keyMatrix = Helper
 				.hexStringToMatrix("00000000000000000000000000000000");
 		byte[] key = Helper.matrixToArray(keyMatrix);
-		AddRoundKey roundKeyAdder = new AddRoundKey(key);
+		AddRoundKey roundKeyAdder = new AddRoundKey(key, false);
 
 		byte[][] input = Helper
 				.hexStringToMatrix("00000000000000000000000000000000");
@@ -174,7 +174,7 @@ public class HelperTest {
 		byte[][] keyMatrix = Helper
 				.hexStringToMatrix("00000000000000000000000000000000");
 		byte[] key = Helper.matrixToArray(keyMatrix);
-		AddRoundKey roundKeyAdder = new AddRoundKey(key);
+		AddRoundKey roundKeyAdder = new AddRoundKey(key, true);
 
 		byte[][] input = Helper
 				.hexStringToMatrix("66E94BD4EF8A2C3B884CFA59CA342B2E");

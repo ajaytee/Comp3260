@@ -85,7 +85,7 @@ public class Encrypter {
 	public byte[][][] encryptByteArray(byte[] inputArray, byte[] key,
 			AESType type) {
 		byte[][] input = Helper.arrayToMatrix(inputArray);
-		AddRoundKey roundKeyAdder = new AddRoundKey(key);
+		AddRoundKey roundKeyAdder = new AddRoundKey(key, false);
 		SubstituteBytes byteSubstituter = new SubstituteBytes();
 		ShiftRows rowShifter = new ShiftRows();
 		MixColumns columnMixer = new MixColumns();

@@ -44,7 +44,7 @@ public class Decrypter {
 		// works?
 
 		byte[][] input = Helper.arrayToMatrix(cipherTextByteArray);
-		AddRoundKey roundKeyAdder = new AddRoundKey(key);
+		AddRoundKey roundKeyAdder = new AddRoundKey(key, true);
 		SubstituteBytes byteSubstituter = new SubstituteBytes();
 		ShiftRows rowShifter = new ShiftRows();
 		MixColumns columnMixer = new MixColumns();
