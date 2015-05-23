@@ -57,24 +57,26 @@ public class Encrypter {
 		}
 		int[][] roundAverages = avalanche(plainText, encryptedText, key, type);
 
-		switch (type) {
-		case AES0:
-			writer.setAvalancheDataAes0(roundAverages);
-			break;
-		case AES1:
-			writer.setAvalancheDataAes1(roundAverages);
-			break;
-		case AES2:
-			writer.setAvalancheDataAes2(roundAverages);
-			break;
-		case AES3:
-			writer.setAvalancheDataAes3(roundAverages);
-			break;
-		case AES4:
-			writer.setAvalancheDataAes4(roundAverages);
-			break;
-		default:
-			break;
+		if (writer != null) {
+			switch (type) {
+			case AES0:
+				writer.setAvalancheDataAes0(roundAverages);
+				break;
+			case AES1:
+				writer.setAvalancheDataAes1(roundAverages);
+				break;
+			case AES2:
+				writer.setAvalancheDataAes2(roundAverages);
+				break;
+			case AES3:
+				writer.setAvalancheDataAes3(roundAverages);
+				break;
+			case AES4:
+				writer.setAvalancheDataAes4(roundAverages);
+				break;
+			default:
+				break;
+			}
 		}
 
 		String cipherText = Helper.arrayToString(
