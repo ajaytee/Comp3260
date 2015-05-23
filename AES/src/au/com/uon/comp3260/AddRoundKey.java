@@ -28,7 +28,6 @@ public class AddRoundKey {
 		// Key expansion
 
 		int round = 0;
-		int rounds = 10;
 		int i = 16;
 		byte[] temp = new byte[4];
 
@@ -67,7 +66,7 @@ public class AddRoundKey {
 				}
 
 				// XOR 1st bit of temp with rcon(i)
-				temp[0] ^= rcon(i);
+				temp[0] ^= rcon(round);
 
 				round++;
 			}
