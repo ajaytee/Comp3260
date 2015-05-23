@@ -140,7 +140,7 @@ public class MixColumns {
 	}
 	
 	// XOR two binary Strings
-	public static String binaryXOR(String bin1, String bin2) {
+	public String binaryXOR(String bin1, String bin2) {
 		StringBuilder sb = new StringBuilder();
 		
 		// add missing zeros if required
