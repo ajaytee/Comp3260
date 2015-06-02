@@ -221,7 +221,7 @@ public class HelperTest {
 	@Test
 	public void testMixColumns() {
 		MixColumns columnMixer = new MixColumns();
-		
+
 		byte[][] input = Helper
 				.hexStringToMatrix("63636363636363636363636363636363");
 		byte[][] output = columnMixer.mixColumns(input, false);
@@ -254,44 +254,6 @@ public class HelperTest {
 		output = columnMixer.mixColumns(input, true);
 		assertEquals("7C6363637C6363637C6363637C636363",
 				Helper.matrixToHexString(output));
-	}
-	
-	@Test
-	public void testMixColumns2() {
-	    MixColumns columnMixer = new MixColumns();
-	    
-	    // test multiply by 2
-        String inputStr = "11010100"; // d4 in hex
-        String resultStr = "10110011";
-        String outputStr = columnMixer.multiply2(inputStr);
-        assertEquals(outputStr, resultStr);
-        
-        // test multiply by 3
-        inputStr = "10111111";
-        resultStr = "11011010";
-        outputStr = columnMixer.multiply3(inputStr);
-        assertEquals(outputStr, resultStr);
-        
-        // test binaryXOR
-        inputStr = "01111110";
-        String inputStr2 = "00011011";
-        resultStr = "01100101";
-        outputStr = columnMixer.binaryXOR(inputStr, inputStr2);
-        assertEquals(outputStr, resultStr);
-        
-        // test sum of results
-        String[] results = new String[4];
-        results[0] = "10110011";
-        results[1] = "11011010";
-        results[2] = "01011101";
-        results[3] = "00110000";
-        String expectedSum = "00000100";
-        String sum = results[0];
-        for (int resultNum = 1; resultNum < 4; resultNum++) {
-            sum = columnMixer.binaryXOR(sum, results[resultNum]);
-        }
-        assertEquals(sum, expectedSum);
-        
 	}
 
 	@Test
