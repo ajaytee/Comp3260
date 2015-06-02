@@ -8,8 +8,18 @@ package au.com.uon.comp3260;
  */
 public class MixColumns {
 
-	static byte[][] matrix = { { 0x03, 0x0b }, { 0x01, 0x0d }, { 0x01, 0x09 },
-			{ 0x02, 0x0e } };
+	private static byte[][] matrix = { { 0x03, 0x0b }, { 0x01, 0x0d },
+			{ 0x01, 0x09 }, { 0x02, 0x0e } };
+
+	private final byte a, b, c, d;
+
+	public MixColumns(boolean decrypt) {
+		int arrayIndex = decrypt ? 1 : 0;
+		a = matrix[0][arrayIndex];
+		b = matrix[1][arrayIndex];
+		c = matrix[2][arrayIndex];
+		d = matrix[3][arrayIndex];
+	}
 
 	// Multiplies two bytes in garlois field 2^8
 	private byte multiply(byte a, byte b) {
@@ -27,15 +37,8 @@ public class MixColumns {
 		return returnValue;
 	}
 
-	public byte[][] mixColumns(byte[][] input, boolean decrypt) {
+	public byte[][] mixColumns(byte[][] input) {
 		int[] temp = new int[4];
-
-		int arrayIndex = decrypt ? 1 : 0;
-		byte a = matrix[0][arrayIndex];
-		byte b = matrix[1][arrayIndex];
-		byte c = matrix[2][arrayIndex];
-		byte d = matrix[3][arrayIndex];
-
 		for (int i = 0; i < 4; i++) {
 			temp[0] = multiply(d, input[0][i]) ^ multiply(a, input[1][i])
 					^ multiply(b, input[2][i]) ^ multiply(c, input[3][i]);
@@ -48,7 +51,6 @@ public class MixColumns {
 			for (int j = 0; j < 4; j++)
 				input[j][i] = (byte) (temp[j]);
 		}
-
 		return input;
 	}
 }

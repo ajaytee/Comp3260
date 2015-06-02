@@ -90,7 +90,7 @@ public class Encrypter {
 		AddRoundKey roundKeyAdder = new AddRoundKey(key, false);
 		SubstituteBytes byteSubstituter = new SubstituteBytes();
 		ShiftRows rowShifter = new ShiftRows();
-		MixColumns columnMixer = new MixColumns();
+		MixColumns columnMixer = new MixColumns(false);
 
 		// 1. round, 2. row, 3. column
 		byte[][][] output = new byte[11][input.length][input[0].length];
@@ -105,7 +105,7 @@ public class Encrypter {
 				output[round] = rowShifter.shiftRows(output[round], false);
 			}
 			if (!type.isSkipMixColumns()) {
-				output[round] = columnMixer.mixColumns(output[round], false);
+				output[round] = columnMixer.mixColumns(output[round]);
 			}
 			if (!type.isSkipAddRoundKey()) {
 				output[round] = roundKeyAdder.addRoundKey(output[round], round,

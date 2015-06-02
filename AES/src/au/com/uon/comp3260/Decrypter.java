@@ -47,14 +47,14 @@ public class Decrypter {
 		AddRoundKey roundKeyAdder = new AddRoundKey(key, true);
 		SubstituteBytes byteSubstituter = new SubstituteBytes();
 		ShiftRows rowShifter = new ShiftRows();
-		MixColumns columnMixer = new MixColumns();
+		MixColumns columnMixer = new MixColumns(true);
 
 		byte[][] output;
 		output = roundKeyAdder.addRoundKey(input, 0, true);
 		for (int round = 0; round < 10; round++) {
 			output = byteSubstituter.substituteBytes(output, true);
 			output = rowShifter.shiftRows(output, true);
-			output = columnMixer.mixColumns(output, true);
+			output = columnMixer.mixColumns(output);
 			output = roundKeyAdder.addRoundKey(output, round + 1, true);
 		}
 		return output;

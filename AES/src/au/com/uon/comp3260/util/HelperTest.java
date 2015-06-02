@@ -220,38 +220,39 @@ public class HelperTest {
 
 	@Test
 	public void testMixColumns() {
-		MixColumns columnMixer = new MixColumns();
+		MixColumns columnMixerEnc = new MixColumns(false);
+		MixColumns columnMixerDec = new MixColumns(true);
 
 		byte[][] input = Helper
 				.hexStringToMatrix("63636363636363636363636363636363");
-		byte[][] output = columnMixer.mixColumns(input, false);
+		byte[][] output = columnMixerEnc.mixColumns(input);
 		assertEquals("63636363636363636363636363636363",
 				Helper.matrixToHexString(output));
 
 		input = Helper.hexStringToMatrix("7C6363637C6363637C6363637C636363");
-		output = columnMixer.mixColumns(input, false);
+		output = columnMixerEnc.mixColumns(input);
 		assertEquals("5D7C7C425D7C7C425D7C7C425D7C7C42",
 				Helper.matrixToHexString(output));
 
 		input = Helper.hexStringToMatrix("B417699B4969173DB417699B4969173D");
-		output = columnMixer.mixColumns(input, false);
+		output = columnMixerEnc.mixColumns(input);
 		assertEquals("B8BAC794039F49DFB8BAC794039F49DF",
 				Helper.matrixToHexString(output));
 
 		input = Helper.hexStringToMatrix("340D605A022FD91CD6600D3F30D8445C");
-		output = columnMixer.mixColumns(input, false);
+		output = columnMixerEnc.mixColumns(input);
 		assertEquals("45D41785B030A0C8253EED720B0B8474",
 				Helper.matrixToHexString(output));
 
 		// Decryption
 		input = Helper.hexStringToMatrix("45D41785B030A0C8253EED720B0B8474");
-		output = columnMixer.mixColumns(input, true);
+		output = columnMixerDec.mixColumns(input);
 		assertEquals("340D605A022FD91CD6600D3F30D8445C",
 				Helper.matrixToHexString(output));
 
 		// Decryption
 		input = Helper.hexStringToMatrix("5D7C7C425D7C7C425D7C7C425D7C7C42");
-		output = columnMixer.mixColumns(input, true);
+		output = columnMixerDec.mixColumns(input);
 		assertEquals("7C6363637C6363637C6363637C636363",
 				Helper.matrixToHexString(output));
 	}
