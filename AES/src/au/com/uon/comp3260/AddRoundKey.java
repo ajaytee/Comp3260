@@ -288,23 +288,24 @@ public class AddRoundKey {
 		return sb.toString();
 	}
 */
-	public byte[][] addRoundKey(byte[][] matrix, int round, boolean decrypt) {
-		if (decrypt)
-			round = 10 - round;
-		byte[] key = subkeys[round];
-		for (int i = 0; i < 4; i++)
-			for (int j = 0; j < 4; j++)
-				matrix[j][i] ^= key[i * 4 + j];
-		return matrix;
-	}
+    public byte[][] addRoundKey(byte[][] matrix, int round, boolean decrypt) {
+        if (decrypt)
+            round = 10 - round;
+        byte[] key = subkeys[round];
+        byte[][] output = new byte[4][4];
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < 4; j++)
+                output[j][i] = (byte) (matrix[j][i] ^ key[i * 4 + j]);
+        return output;
+    }
 
-	private static byte[] rotate(byte[] input) {
-		byte[] output = new byte[input.length];
-		byte a = input[0];
-		for (int i = 0; i < 3; i++)
-			output[i] = output[i + 1];
-		output[3] = a;
-		return output;
-	}
+    private static byte[] rotate(byte[] input) {
+        byte[] output = new byte[input.length];
+        byte a = input[0];
+        for (int i = 0; i < 3; i++)
+            output[i] = input[i + 1];
+        output[3] = a;
+        return output;
+    }
 
 }
