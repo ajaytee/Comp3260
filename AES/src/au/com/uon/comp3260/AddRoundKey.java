@@ -1,5 +1,7 @@
 package au.com.uon.comp3260;
 
+import au.com.uon.comp3260.util.Helper;
+
 
 /**
  * 
@@ -19,13 +21,88 @@ public class AddRoundKey {
 	private static byte[][] generateSubkeys(byte[] key, boolean decrypt) {
 		byte[][] subkeys = new byte[11][16];
 		subkeys[0] = key;
+		
+		byte[] keys = new byte[176];
 
 		for (int round = 1; round < 11; round++) {
 			byte subkey[] = new byte[16];
 			subkeys[round] = subkey;
 		}
+		
+		// Key Expansion
+		
+		// set first 16 bytes
+		for (int i = 0; i < 16; i++) {
+		    keys[i] = key[i];
+		}
+		
+		int round = 1;
+		int i = 16;   // first 16 bytes already set
+		byte[] temp = new byte[4];
+		
+		while (i < 176) {     // need 176 bytes of keys
+		    
+		    // set temp bytes
+		    for (int j = 0; j < 4; j++) {
+		        temp[j] = keys[j + i - 4];
+		    }
+		    
+		    // if new key, do main calculations
+		    if (i % 16 == 0) {
+		        
+		        // Rotate tempBytes
+                temp = rotate(temp);
 
-		// Key expansion
+                // Apply S-box
+                for (int j = 0; j < 4; j++) {
+                    temp[j] = applySbox(temp[j], decrypt);
+                }
+
+                // XOR 1st bit of temp with round constant
+                temp[0] ^= rcon(round);
+		        round++;
+		    }
+		    
+		    byte newValue = 0;
+		    
+		    // assign temp bytes to keys
+		    for (int j = 0; j < 4; j++)
+		        
+		        // set new value
+		        newValue = (byte) (temp[j] ^ keys[i-16]);
+		        
+		        // store new value
+		        keys[i] = newValue;
+		        
+		        i++;
+		}
+		
+		// convert keys into subkeys arrays
+		int total = 16;
+		byte[] newRoundKey = new byte[16];
+		
+		for (int rnd = 1; rnd < 11; rnd++) {
+		    
+		    // set new key value
+		    for (int j = 0; j < 16; j++) {
+		        newRoundKey[j] = keys[total];
+		        total++;
+		    }
+		    
+		    // set subkeys to new key value
+		    subkeys[rnd] = newRoundKey;
+		    //System.out.println("SUBKEY ROUND: " + rnd + " -- " + newRoundKey);
+		    
+		    
+		}
+		//System.out.println(Helper.matrixToHexString(subkeys));
+		return subkeys;
+	}
+
+
+
+/*		
+		// OLD: Key expansion
 
 		int round = 0;
 		int i = 16;
@@ -33,6 +110,8 @@ public class AddRoundKey {
 
 		while (i < 176) { // need 176 bytes of key
 
+		    // if new key, set temp to last 4 bytes in previous subkey
+		    // if not new key, set temp to 
 			// set next set of temp bytes
 			for (int j = 0; j < 4; j++) {
 				temp[j] = subkeys[round][(j + i - 4) - (round * 16)]; // tempBytes
@@ -54,7 +133,7 @@ public class AddRoundKey {
 				// ...
 			}
 
-			// if i / 16 gives no remainder = new Key
+			// if i / 16 gives no remainder = new Key = do more stuff
 			if (i % 16 == 0) {
 
 				// Rotate tempBytes
@@ -90,9 +169,10 @@ public class AddRoundKey {
 				i++;
 			}
 		}
-
+		
 		return subkeys;
 	}
+*/
 
 	private static byte applySbox(byte input, boolean decrypt) {
 		char[] matrix = SubstituteBytes.subByteMatrix;
@@ -111,13 +191,29 @@ public class AddRoundKey {
 		} else {
 			// until input = 1, multiply x by 2
 			while (input != 1) {
-				x = multiply2(x);
+				x = multiply((byte) x, (byte) 2);
 				input--;
 			}
 		}
 		return x;
 	}
 
+	// Multiplies two bytes in garlois field 2^8
+    private static byte multiply(byte a, byte b) {
+        byte returnValue = 0;
+        byte temp = 0;
+        while (a != 0) {
+            if ((a & 1) != 0)
+                returnValue = (byte) (returnValue ^ b);
+            temp = (byte) (b & 0x80);
+            b = (byte) (b << 1);
+            if (temp != 0)
+                b = (byte) (b ^ 0x1b);
+            a = (byte) ((a & 0xff) >> 1);
+        }
+        return returnValue;
+    }
+/*    
 	private static int multiply2(int input) {
 
 		// change input to string
@@ -167,7 +263,7 @@ public class AddRoundKey {
 		}
 		return sb.toString();
 	}
-
+*/
 	public byte[][] addRoundKey(byte[][] matrix, int round, boolean decrypt) {
 		if (decrypt)
 			round = 10 - round;
