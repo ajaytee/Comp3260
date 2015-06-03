@@ -55,7 +55,9 @@ public class AddRoundKey {
 
                 // Apply S-box
                 for (int j = 0; j < 4; j++) {
-                    temp[j] = applySbox(temp[j], decrypt);
+                    // We always want the encryption sbox. for decryption we use
+                    // the same keys, but in inverse order.
+                    temp[j] = applySbox(temp[j], false);
                 }
 
                 // XOR 1st bit of temp with round constant
