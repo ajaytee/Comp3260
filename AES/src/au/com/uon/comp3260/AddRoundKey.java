@@ -91,6 +91,10 @@ public class AddRoundKey {
 		    
 		    // set subkeys to new key value
 		    subkeys[rnd] = newRoundKey;
+		    
+		    byte[][] testMatrix = Helper.arrayToMatrix(newRoundKey);
+		    String testString = Helper.matrixToHexString(testMatrix);
+		    System.out.println("Subkey Round " + rnd + " - " + testString);
 		    //System.out.println("SUBKEY ROUND: " + rnd + " -- " + newRoundKey);
 		    
 		    
@@ -183,6 +187,24 @@ public class AddRoundKey {
 		return (byte) matrix[input & 0xFF];
 	}
 
+	private static int rcon2(int input) {
+	    int result = 0;
+	    switch (input) {
+	        case 1  :  result = 1;
+	        case 2  :  result = 2;
+	        case 3  :  result = 4;
+	        case 4  :  result = 8;
+	        case 5  :  result = 16;
+	        case 6  :  result = 32;
+	        case 7  :  result = 64;
+	        case 8  :  result = 128;
+	        case 9  :  result = 29;
+	        case 10 :  result = 54;
+	    }
+	    
+	    return result;
+	}
+	
 	private static int rcon(int input) {
 		int x = 1;
 		// if input is 0, return 0
