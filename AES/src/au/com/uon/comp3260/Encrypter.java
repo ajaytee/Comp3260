@@ -115,7 +115,7 @@ public class Encrypter {
                 tmp = rowShifter.shiftRows(tmp, false);
             }
             formattedOutput = Helper.matrixToHexString(tmp);
-            if (!type.isSkipMixColumns()) {
+            if (!type.isSkipMixColumns() && round != 10) {
                 tmp = columnMixer.mixColumns(tmp);
             }
             formattedOutput = Helper.matrixToHexString(tmp);
