@@ -170,6 +170,11 @@ public class Helper {
         return sb.toString();
     }
 
+    public static String byteStringToHexString(String input) {
+        return Helper.matrixToHexString(Helper.arrayToMatrix(Helper
+                .stringToByteArray(input)));
+    }
+
     /**
      * Formats a byte array to a string. each byte will be presented by 8
      * characters. 2 Arrays of the same length will always have the same output

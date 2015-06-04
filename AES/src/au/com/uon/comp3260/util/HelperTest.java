@@ -68,16 +68,31 @@ public class HelperTest {
     public void testDecryptEncrypt() {
         Encrypter enc = new Encrypter();
         Decrypter dec = new Decrypter();
-        for (String testKey : testData()) {
-            for (String testPlainTest : testData()) {
+        int round = 0;
+        int errors = 0;
+        String testData[] = testData();
+        for (String testKey : testData) {
+            for (String testPlainTest : testData) {
                 String cipherText = enc.encrypt(testPlainTest, testKey, null,
                         AESType.AES0);
                 String decryptedCipherText = dec.decrypt(cipherText, testKey,
                         null);
-                System.out.println("Cipher Text: " + cipherText);
-                assertEquals(testPlainTest, decryptedCipherText);
+                String output = "Round " + round + "\n      Plain: "
+                        + Helper.byteStringToHexString(testPlainTest)
+                        + "\n    Chipher: "
+                        + Helper.byteStringToHexString(cipherText)
+                        + "\n Deciphered: "
+                        + Helper.byteStringToHexString(decryptedCipherText);
+                if (testPlainTest.equals(decryptedCipherText)) {
+                    System.out.println("Success: " + output);
+                } else {
+                    System.err.println("Fail:    " + output);
+                    errors++;
+                }
+                round++;
             }
         }
+        assertEquals(0, errors);
     }
 
     @Test
@@ -122,6 +137,21 @@ public class HelperTest {
         System.out.println("Decrypted Cipher Text: "
                 + hexStringOfDecryptedCipherText);
         assertEquals(plainText, decryptedText);
+    }
+
+    @Test
+    public void testDecryptExample2() {
+        Decrypter dec = new Decrypter();
+        String key = "00000000000000010000001000000011000001000000010100000110000001110000100000001001000010100000101100001100000011010000111000001111";
+        String plain = "00000000000100010010001000110011010001000101010101100110011101111000100010011001101010101011101111001100110111011110111011111111";
+        String cipherText = "01101001110001001110000011011000011010100111101100000100001100001101100011001101101101111000000001110000101101001100010101011010";
+
+        String decryptedText = dec.decrypt(cipherText, key, null);
+        String hexStringOfDecryptedText = Helper.matrixToHexString(Helper
+                .arrayToMatrix(Helper.stringToByteArray(decryptedText)));
+        String hexStringOfPlainText = Helper.matrixToHexString(Helper
+                .arrayToMatrix(Helper.stringToByteArray(plain)));
+        assertEquals(hexStringOfPlainText, hexStringOfDecryptedText);
     }
 
     @Test

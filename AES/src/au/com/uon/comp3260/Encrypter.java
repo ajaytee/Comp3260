@@ -40,14 +40,14 @@ public class Encrypter {
 
         byte[] plainTextByteArray = Helper.stringToByteArray(plainText);
 
-        System.out.println("Input Bytes:");
-        System.out.println(Helper.matrixToString(
-                Helper.arrayToMatrix(plainTextByteArray), true));
+        // System.out.println("Input Bytes:");
+        // System.out.println(Helper.matrixToString(
+        // Helper.arrayToMatrix(plainTextByteArray), true));
         byte[] keyBytes = Helper.stringToByteArray(key);
         byte[][][] encrypted = encryptByteArray(plainTextByteArray, keyBytes,
                 type);
-        System.out.println("Encrypted Bytes:");
-        System.out.println(Helper.matrixToString(encrypted[10], true));
+        // System.out.println("Encrypted Bytes:");
+        // System.out.println(Helper.matrixToString(encrypted[10], true));
 
         // Calculate avalanche effect
         String encryptedText[] = new String[11];
@@ -82,17 +82,17 @@ public class Encrypter {
 
         String cipherText = Helper.arrayToString(
                 Helper.matrixToArray(encrypted[10]), false);
-        System.out.println("CipherText: "
-                + Helper.matrixToHexString(encrypted[10]));
+        // System.out.println("CipherText: "
+        // + Helper.matrixToHexString(encrypted[10]));
         return cipherText;
     }
 
     public byte[][][] encryptByteArray(byte[] inputArray, byte[] key,
             AESType type) {
         byte[][] input = Helper.arrayToMatrix(inputArray);
-        System.out.println("ENCRYPTING\n Bytes: "
-                + Helper.matrixToHexString(input) + "\n Key: "
-                + Helper.matrixToHexString(Helper.arrayToMatrix(key)));
+        // System.out.println("ENCRYPTING\n Bytes: "
+        // + Helper.matrixToHexString(input) + "\n Key: "
+        // + Helper.matrixToHexString(Helper.arrayToMatrix(key)));
         AddRoundKey roundKeyAdder = new AddRoundKey(Helper.copyByteArray(key),
                 false);
         SubstituteBytes byteSubstituter = new SubstituteBytes();
@@ -124,8 +124,8 @@ public class Encrypter {
                         round));
             }
             formattedOutput = Helper.matrixToHexString(tmp);
-            System.out.println("Encrypted bytes after round: " + round
-                    + " are: " + formattedOutput);
+            // System.out.println("Encrypted bytes after round: " + round
+            // + " are: " + formattedOutput);
             output[round] = Helper.copyByteMatrix(tmp);
         }
         formattedOutput = Helper.matrixToHexString(output[10]);

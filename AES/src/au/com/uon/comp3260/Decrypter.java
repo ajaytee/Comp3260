@@ -26,11 +26,12 @@ public class Decrypter {
 
         String plainText = Helper.arrayToString(
                 Helper.matrixToArray(decrypted), false);
+
         if (outputFile != null) {
             OutputFileWriter writer = new OutputFileWriter(outputFile);
             writer.setKey(key);
             writer.setPlainText(plainText);
-            writer.setDecryption(false);
+            writer.setDecryption(true);
             writer.setStartTime(start);
             writer.setEndTime(end);
             writer.setCipherText(cipherText);
@@ -46,18 +47,18 @@ public class Decrypter {
         ShiftRows rowShifter = new ShiftRows();
         MixColumns columnMixer = new MixColumns(true);
 
-        byte[][] output;
-        output = Helper.copyByteMatrix(roundKeyAdder.addRoundKey(input, 0));
-        for (int round = 1; round < 11; round++) {
+        byte[][] output = Helper.copyByteMatrix(input);
+        for (int round = 0; round < 10; round++) {
+            output = Helper.copyByteMatrix(roundKeyAdder.addRoundKey(output,
+                    round));
+            if (round > 0) {
+                output = Helper.copyByteMatrix(columnMixer.mixColumns(output));
+            }
             output = Helper.copyByteMatrix(rowShifter.shiftRows(output, true));
             output = Helper.copyByteMatrix(byteSubstituter.substituteBytes(
                     output, true));
-            output = Helper.copyByteMatrix(roundKeyAdder.addRoundKey(output,
-                    round));
-            output = Helper.copyByteMatrix(columnMixer.mixColumns(output));
-            System.out.println("Decrypt round: " + round + " bytes: "
-                    + Helper.matrixToHexString(output));
         }
+        output = Helper.copyByteMatrix(roundKeyAdder.addRoundKey(output, 10));
         return output;
     }
 
