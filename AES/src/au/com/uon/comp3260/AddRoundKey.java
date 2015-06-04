@@ -12,23 +12,18 @@ import au.com.uon.comp3260.util.Helper;
 public class AddRoundKey {
 
     private final byte[][] subkeys;
+    private final boolean decrypt;
 
     public AddRoundKey(byte[] key, boolean decrypt) {
-        subkeys = generateSubkeys(key, decrypt);
+        subkeys = Helper.copyByteMatrix(generateSubkeys(key));
+        this.decrypt = decrypt;
     }
 
-    private static byte[][] generateSubkeys(byte[] key, boolean decrypt) {
-        byte[][] subkeys = new byte[11][16];
-        subkeys[0] = key;
+    private static byte[][] generateSubkeys(byte[] key) {
+        final byte[][] _subkeys = new byte[11][16];
+        _subkeys[0] = key;
 
         byte[] keys = new byte[176];
-
-        for (int round = 1; round < 11; round++) {
-            byte subkey[] = new byte[16];
-            subkeys[round] = subkey;
-        }
-
-        // Key Expansion
 
         // set first 16 bytes
         for (int i = 0; i < 16; i++) {
@@ -81,9 +76,9 @@ public class AddRoundKey {
 
         // convert keys into subkeys arrays
         int total = 16;
-        byte[] newRoundKey = new byte[16];
 
         for (int rnd = 1; rnd < 11; rnd++) {
+            final byte[] newRoundKey = new byte[16];
 
             // set new key value
             for (int j = 0; j < 16; j++) {
@@ -92,14 +87,15 @@ public class AddRoundKey {
             }
 
             // set subkeys to new key value
-            subkeys[rnd] = newRoundKey;
 
-            byte[][] testMatrix = Helper.arrayToMatrix(newRoundKey);
-            String testString = Helper.matrixToHexString(testMatrix);
-            System.out.println("Subkey Round " + rnd + " - " + testString);
+            _subkeys[rnd] = Helper.copyByteArray(newRoundKey);
+
+            // byte[][] testMatrix = Helper.arrayToMatrix(newRoundKey);
+            // String testString = Helper.matrixToHexString(testMatrix);
+            // System.out.println("Subkey Round " + rnd + " - " + testString);
 
         }
-        return subkeys;
+        return _subkeys;
     }
 
     private static byte applySbox(byte input, boolean decrypt) {
@@ -142,10 +138,16 @@ public class AddRoundKey {
         return returnValue;
     }
 
-    public byte[][] addRoundKey(byte[][] matrix, int round, boolean decrypt) {
-        if (decrypt)
+    public byte[][] addRoundKey(byte[][] matrix, int round) {
+        // String action = "Encrypt";
+        if (decrypt) {
             round = 10 - round;
+            // action = "Decrypt";
+        }
         byte[] key = subkeys[round];
+        // System.out.println(action + " with key: "
+        // + Helper.matrixToHexString(Helper.arrayToMatrix(key))
+        // + " in round: " + round);
         for (int i = 0; i < 4; i++)
             for (int j = 0; j < 4; j++)
                 matrix[j][i] = (byte) (matrix[j][i] ^ key[i * 4 + j]);
